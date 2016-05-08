@@ -1,6 +1,42 @@
-main{
+html, body{
+  height: 100%;
+}
+
+.col{
+  padding: 2px;
+  width: 25%;
+  height: 100%;
+  float: left;
+  overflow: auto;
+}
+
+.col-content{
+  border: 1px solid white;
+  box-shadow: 0 0 2px blue;
   width: 100%;
   height: 100%;
+}
+.col-content:hover{
+  border: 1px solid rgba(0, 0, 100, .3);
+  box-shadow: 0 0 1em blue;
+  transition: box-shadow 1s, border 1s;
+}
+
+.sticky-note{
+  padding: 0px;
+  border-bottom: 1px solid rgb(230, 230, 230);
   position: relative;
-  overflow: auto;
+}
+
+.add-new{
+  width: 100%;
+  height: 20px;
+}
+.add-new:hover{
+  height: 100px;
+  transition: height .1s;
+}
+
+.sticky-note-content{
+  padding: 0px 10px 20px 10px;
 }
