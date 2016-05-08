@@ -1,8 +1,8 @@
 $(document).ready(function(){
-  $(".add-new").hover(function(){
-
+  $(".col-content").each(function(index){
+    if($(this).children().length == 0){
+      $(this).html("<div class='add-col'><p>+</p></div>")
+    }
   })
-  $(".col-content").hover(function(){
-
-  })
+  
 })
