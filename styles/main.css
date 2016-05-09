@@ -31,10 +31,31 @@ html, body{
 .add-new{
   width: 100%;
   height: 20px;
+  text-align: center;
+}
+.add-new p{
+  margin: 0 auto;
+  display: inline-block;
+  position: relative;
+  top: 50%;
+  transform: translate(0, -50%);
+  width: 50px;
+  height: 50px;
+
+  line-height: 50px;
+
+  border-radius: 5px;
+  color: white;
 }
 .add-new:hover{
+  background: rgba(0, 0, 0, 0.5);
+  transition: background .2s;
   height: 100px;
   transition: height .1s;
+}
+.add-new:hover p{
+  background: rgba(0, 0, 0, 0.5);
+  transition: background .2s;
 }
 
 .sticky-note-content{
@@ -74,4 +95,28 @@ html, body{
   height: 100px;
   width: 100%;
   border-bottom: 1px solid rgb(230, 230, 230);
+  text-align: center;
+}
+.add-end-col p{
+  margin: 0 auto;
+  display: inline-block;
+  position: relative;
+  top: 50%;
+  transform: translate(0, -50%);
+  width: 50px;
+  height: 50px;
+
+  line-height: 50px;
+
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.2);
+  color: white;
+}
+.add-end-col:hover{
+  background: rgba(0, 0, 0, 0.5);
+  transition: background .2s;
+}
+.add-end-col:hover p{
+  background: rgba(0, 0, 0, 0.5);
+  transition: background .2s;
 }
