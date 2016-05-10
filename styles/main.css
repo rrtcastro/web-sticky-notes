@@ -29,6 +29,17 @@ html, body{
   position: relative;
 }
 
+.delete-triangle{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+
+  width: 12px;
+	height: 12px;
+	border-left: 12px solid transparent;
+	border-bottom: 12px solid red;
+}
+
 .add-new{
   width: 100%;
   height: 20px;
@@ -53,6 +64,7 @@ html, body{
   transition: background .2s;
   height: 100px;
   transition: height .1s;
+  margin-bottom: 20px;
 }
 .add-new:hover p{
   background: rgba(0, 0, 0, 0.5);
