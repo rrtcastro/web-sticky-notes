@@ -12,31 +12,56 @@
       <section class="col-content">
         <input type="hidden" value="0">
         <div class='add-col'><p>+</p></div>
-        <div class="add-end-col"><p>+</p></div>
       </section>
     </section>
     <section class="col">
       <section class="col-content">
         <input type="hidden" value="1">
         <div class='add-col'><p>+</p></div>
-        <div class="add-end-col"><p>+</p></div>
       </section>
     </section>
     <section class="col">
       <section class="col-content">
         <input type="hidden" value="2">
         <div class='add-col'><p>+</p></div>
-        <div class="add-end-col"><p>+</p></div>
       </section>
     </section>
     <section class="col">
       <section class="col-content">
         <input type="hidden" value="3">
         <div class='add-col'><p>+</p></div>
-        <div class="add-end-col"><p>+</p></div>
       </section>
     </section>
+
+
+    <div class="modal fade" id="insert-sticky-modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+            <h4 class="modal-title">Add New Sticky Note</h4>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="message-text" class="control-label">Message:</label>
+                <textarea class="form-control" id="message-text"></textarea>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary">Accept</button>
+          </div>
+
+          <input type="hidden" id="target-col" value="0">
+
+        </div>
+      </div>
+    </div>
+
+
     <script src="scripts/jquery-2.3.3.min.js"></script>
+    <script src="scripts/bootstrap.min.js"></script>
     <script src="scripts/observable-array.js"></script>
     <script src="scripts/web-storage.js"></script>
   </body>

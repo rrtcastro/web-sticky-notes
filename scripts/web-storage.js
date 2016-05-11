@@ -21,15 +21,11 @@ function addDeleteHandler(e){
   localStorage.setItem('stickyNotes', JSON.stringify(stickyNotes))
   e.parent().remove()
 
-  if(col.children().length > 3){
-    col.children("article").each(function(index){
-      $(this).children("input").val(index)
-    })
-  }
-  else{
-    col.children(".add-col").show()
-    col.children(".add-end-col").hide()
-  }
+  col.children("article").each(function(index){
+    $(this).children("input").val(index)
+  })
+  calculateHeight(col.children(".add-col"))
+
 }
 function addEditHandler(e){
   var value = e.html()
@@ -66,50 +62,65 @@ function addFunction(e){
   e.children(".sticky-note-content").on('mousedown', function(e){addStrikeThrough(e, $(this))})
 }
 
+function stickyNoteModalPrompt(columnIndex){
+  $('#insert-sticky-modal').modal('show')
+  $('#target-col').val(columnIndex)
+}
+function calculateHeight(element){
+  var colHeight = 0
+  var numberOfNotes = 0;
+  element.siblings(".sticky-note").each(function(){
+    colHeight += $(this).height()
+    numberOfNotes++;
+  })
+  console.log(colHeight)
+  console.log(element.parent().height())
+  if(element.parent().height() - colHeight > 100){
+    element.css("height", window.innerHeight - colHeight - 6 - numberOfNotes + "px")
+  }
+  else {
+    element.css("height", "100px")
+  }
+
+}
+
 $(document).ready(function(){
 
   stickyNotes.forEach(function(col, colIndex){
-    if(col.length == 0){
-      $(".col-content").eq(colIndex).children(".add-end-col").hide()
-    }
-    else{
-      var bottom = $(".col-content").eq(colIndex).children(".add-end-col")
-      $(".col-content").eq(colIndex).children(".add-col").hide()
-      stickyNotes[colIndex].forEach(function(note, noteIndex){
-        bottom.before(stickyNoteFrontTemplate + note[0] + stickyNoteBackTemplate)
-        bottom.prev().children("input").val(noteIndex)
-        addFunction(bottom.prev())
+    var bottom = $(".col-content").eq(colIndex).children(".add-col")
+    stickyNotes[colIndex].forEach(function(note, noteIndex){
+      bottom.before(stickyNoteFrontTemplate + note[0] + stickyNoteBackTemplate)
+      bottom.prev().children("input").val(noteIndex)
+      addFunction(bottom.prev())
 
-        if(note[1])
-          bottom.prev().children(".sticky-note-content").addClass("text-linethrough")
+      if(note[1])
+        bottom.prev().children(".sticky-note-content").addClass("text-linethrough")
 
-      }, bottom)
-    }
+    }, bottom)
+
+    calculateHeight(bottom)
+
   })
 
   $(".add-col").click(function(){
     var columnIndex = $(this).siblings("input").val()
-    var note = prompt("What's on your mind")
-    stickyNotes[columnIndex].push([note, false])
-    localStorage.setItem('stickyNotes', JSON.stringify(stickyNotes))
-
-    $(this).after(stickyNoteFrontTemplate + note + stickyNoteBackTemplate)
-    addFunction($(this).next())
-
-    $(this).siblings(".add-end-col").css("display","block")
-    $(this).hide()
+    stickyNoteModalPrompt(columnIndex)
   })
 
-  $(".add-end-col").click(function(){
-    var columnIndex = $(this).siblings("input").val()
-    var note = prompt("What's on your mind")
+  $(".modal-footer button").click(function(){
+
+    var note = $("#message-text").val()
+    var columnIndex = $("#target-col").val()
+
     stickyNotes[columnIndex].push([note, false])
     localStorage.setItem('stickyNotes', JSON.stringify(stickyNotes))
 
+    $(".add-col").eq(columnIndex).before(stickyNoteFrontTemplate + note + stickyNoteBackTemplate)
+    $(".add-col").eq(columnIndex).prev().children("input").val(stickyNotes[columnIndex].length - 1)
+    addFunction($(".add-col").eq(columnIndex).prev())
 
-    $(this).before(stickyNoteFrontTemplate + note + stickyNoteBackTemplate)
-    $(this).prev().children("input").val(stickyNotes[columnIndex].length - 1)
-    addFunction($(this).prev())
+    $('#insert-sticky-modal').modal('hide')
+    calculateHeight($(".add-col").eq(columnIndex))
 
   })
 
