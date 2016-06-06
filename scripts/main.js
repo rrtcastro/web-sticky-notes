@@ -19,6 +19,8 @@ function addDeleteHandler(element){
 }
 function addEditHandler(element){
   var parent = element.parentNode.parentNode
+  var parentID = parent.getElementsByTagName('input')[0].value
+  var noteID = element.parentNode.getElementsByTagName('input')[0].value
   var addNode = document.createElement("div")
   addNode.className = "add-node"
 
@@ -29,8 +31,12 @@ function addEditHandler(element){
   addNodeInput.addEventListener('keydown', function(event){
     const keyName = event.key;
     if(!event.shiftKey && keyName === 'Enter'){
-      var newNode = createNewArticle(this.value,i)
-      parent.insertBefore(newNode, element.parentNode)
+      var newNode = createNewArticle(this.value, noteID)
+
+      stickyNotes[parentID][noteID] = [this.value, false]
+      localStorage.setItem('stickyNotes', JSON.stringify(stickyNotes))
+
+      parent.insertBefore(newNode, addNode)
       parent.removeChild(addNode)
     }
   }, false)
@@ -38,6 +44,23 @@ function addEditHandler(element){
   addNode.appendChild(addNodeInput)
   parent.insertBefore(addNode, element.parentNode)
   parent.removeChild(element.parentNode)
+}
+function addStrikeThroughHandler(event, element){
+  if(event.which === 2){
+    var parent = element.parentNode
+    var colIndex = parent.parentNode.getElementsByTagName("input")[0].value
+    var noteIndex = parent.getElementsByTagName("input")[0].value
+    stickyNotes[colIndex][noteIndex][1] = !stickyNotes[colIndex][noteIndex][1]
+    localStorage.setItem('stickyNotes', JSON.stringify(stickyNotes))
+
+    if(element.className.includes('text-linethrough')){
+      let index = element.className.indexOf('text-linethrough')
+      element.className = element.className.substr(0, index - 1)
+    }
+    else {
+      element.className += ' text-linethrough'
+    }
+  }
 }
 
 function createNewArticle(noteContent, noteIndex){
@@ -59,7 +82,7 @@ function createNewArticle(noteContent, noteIndex){
 
   newNodeDeleteButton.addEventListener('click', function(event){addDeleteHandler(this)}, false)
   newNodeContent.addEventListener('dblclick', function(event){addEditHandler(this)}, false)
-  //newNodeContent.addEventListener('mousedown', function(event){addStrikeThrough(event, this)}, false)
+  newNodeContent.addEventListener('mousedown', function(event){addStrikeThroughHandler(event, this)}, false)
 
   newNode.appendChild(newNodeID)
   newNode.appendChild(newNodeContent)
@@ -114,7 +137,12 @@ for(let i = 0; i < element.length; i++){
     addNodeInput.addEventListener('keydown', function(event){
       const keyName = event.key;
       if(!event.shiftKey && keyName === 'Enter'){
-        var newNode = createNewArticle(this.value,i)
+        var noteID = parent.getElementsByTagName('article').length
+        var newNode = createNewArticle(this.value, noteID)
+
+        stickyNotes[i].push([this.value, false])
+        localStorage.setItem('stickyNotes', JSON.stringify(stickyNotes))
+
         parent.insertBefore(newNode, element[i])
         parent.removeChild(addNode)
       }
