@@ -32,6 +32,7 @@ function createNewArticle(noteContent, noteIndex){
   return newNode
 }
 
+
 //Start of main function. Add document ready later
 
 //Initialize global variables
@@ -62,10 +63,28 @@ stickyNotes.forEach(function(col, colIndex){
 
 })
 
+//Add event listener for add notes beneath every column
+var element = document.getElementsByClassName("add-col")
+for(let i = 0; i < element.length; i++){
+  element[i].addEventListener('click', function(){
+    var parent = element[i].parentNode
+    var addNode = document.createElement("div")
+    addNode.className = "add-node"
 
-document.getElementsByClassName("add-col").forEach(function(element, index){
-  element.addEventListener('click', function(){
-    stickyNoteModalPrompt(index)
+    var addNodeInput = document.createElement("textarea")
+    addNodeInput.addEventListener('keydown', function(event){
+      const keyName = event.key;
+      if(!event.shiftKey && keyName === 'Enter'){
+        var newNode = createNewArticle(this.value,i)
+        parent.insertBefore(newNode, element[i])
+        parent.removeChild(addNode)
+      }
+    }, false)
+
+    addNode.appendChild(addNodeInput)
+    parent.insertBefore(addNode, element[i])
+
   }, false)
-})
+
+}
 //End of main function
