@@ -1,5 +1,43 @@
-function addDeleteHandler(){
+function addDeleteHandler(element){
+  var parent = element.parentNode
+  //var columnIndex = e.parent().siblings("input").val()
+  var columnIndex = parent.parentNode.getElementsByTagName('input')[0].value
+  //var noteIndex = e.siblings("input").val()
+  var noteIndex = parent.getElementsByTagName('input')[0].value
+  //var col = e.parent().parent()
+  var col = parent.parentNode
 
+  stickyNotes[columnIndex].splice(noteIndex, 1)
+  localStorage.setItem('stickyNotes', JSON.stringify(stickyNotes))
+  col.removeChild(parent)
+
+  var articles = col.getElementsByTagName('article')
+  for(let i = 0; i < articles.length; i++){
+    articles[i].getElementsByTagName('input')[0].value = i
+  }
+  //calculateHeight(col.children(".add-col"))
+}
+function addEditHandler(element){
+  var parent = element.parentNode.parentNode
+  var addNode = document.createElement("div")
+  addNode.className = "add-node"
+
+  var addNodeInput = document.createElement("textarea")
+  //Add event listener for the textarea
+  //If shift is not held down while pressing enter, Create a new
+  //note using the value of textarea
+  addNodeInput.addEventListener('keydown', function(event){
+    const keyName = event.key;
+    if(!event.shiftKey && keyName === 'Enter'){
+      var newNode = createNewArticle(this.value,i)
+      parent.insertBefore(newNode, element.parentNode)
+      parent.removeChild(addNode)
+    }
+  }, false)
+
+  addNode.appendChild(addNodeInput)
+  parent.insertBefore(addNode, element.parentNode)
+  parent.removeChild(element.parentNode)
 }
 
 function createNewArticle(noteContent, noteIndex){
@@ -19,11 +57,9 @@ function createNewArticle(noteContent, noteIndex){
   var newNodeDeleteButton = document.createElement("div")
   newNodeDeleteButton.setAttribute("class","delete-triangle")
 
-
-  //addFunction(bottom.prev())
-  //newNodeDeleteButton.addEventListener('click', function(){addDeleteHandler(this)}, false)
-  //newNodeContent.addEventListener('dblclick', function(){addEditHandler(this)}, false)
-  //newNodeContent.addEventListener('mousedown', function(){addStrikeThrough(this)}, false)
+  newNodeDeleteButton.addEventListener('click', function(event){addDeleteHandler(this)}, false)
+  newNodeContent.addEventListener('dblclick', function(event){addEditHandler(this)}, false)
+  //newNodeContent.addEventListener('mousedown', function(event){addStrikeThrough(event, this)}, false)
 
   newNode.appendChild(newNodeID)
   newNode.appendChild(newNodeContent)
@@ -72,6 +108,9 @@ for(let i = 0; i < element.length; i++){
     addNode.className = "add-node"
 
     var addNodeInput = document.createElement("textarea")
+    //Add event listener for the textarea
+    //If shift is not held down while pressing enter, Create a new
+    //note using the value of textarea
     addNodeInput.addEventListener('keydown', function(event){
       const keyName = event.key;
       if(!event.shiftKey && keyName === 'Enter'){
