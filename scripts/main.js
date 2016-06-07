@@ -1,10 +1,25 @@
+function calculateHeight(element){
+  var colHeight = 0
+  var numberOfNotes = 0;
+  var siblings = element.parentNode.getElementsByClassName('sticky-note')
+  for(let i = 0; i < siblings.length; i++){
+    colHeight += siblings[i].clientHeight
+    numberOfNotes += 1
+  }
+
+  if(element.parentNode.clientHeight - colHeight > 100){
+    element.style.height = window.innerHeight - colHeight - 6 - numberOfNotes + "px"
+  }
+  else {
+    element.style.height = '100px'
+  }
+
+}
+
 function addDeleteHandler(element){
   var parent = element.parentNode
-  //var columnIndex = e.parent().siblings("input").val()
   var columnIndex = parent.parentNode.getElementsByTagName('input')[0].value
-  //var noteIndex = e.siblings("input").val()
   var noteIndex = parent.getElementsByTagName('input')[0].value
-  //var col = e.parent().parent()
   var col = parent.parentNode
 
   stickyNotes[columnIndex].splice(noteIndex, 1)
@@ -15,7 +30,7 @@ function addDeleteHandler(element){
   for(let i = 0; i < articles.length; i++){
     articles[i].getElementsByTagName('input')[0].value = i
   }
-  //calculateHeight(col.children(".add-col"))
+  calculateHeight(col.getElementsByClassName('add-col')[0])
 }
 function addEditHandler(element){
   var parent = element.parentNode.parentNode
@@ -38,6 +53,8 @@ function addEditHandler(element){
 
       parent.insertBefore(newNode, addNode)
       parent.removeChild(addNode)
+
+      calculateHeight(parent.getElementsByClassName('add-col')[0])
     }
   }, false)
 
@@ -105,11 +122,9 @@ else{
 
 
 stickyNotes.forEach(function(col, colIndex){
-  //var bottom = $(".col-content").eq(colIndex).children(".add-col")
   var column = document.getElementsByClassName("col-content")[colIndex]
   var bottom = document.getElementsByClassName("add-col")[colIndex]
   col.forEach(function(note, noteIndex){
-    //bottom.before(stickyNoteFrontTemplate + note[0] + stickyNoteBackTemplate)
     var newNode = createNewArticle(note[0], noteIndex)
     column.insertBefore(newNode, bottom)
 
@@ -118,7 +133,7 @@ stickyNotes.forEach(function(col, colIndex){
 
   }, bottom)
 
-  //calculateHeight(bottom)
+  calculateHeight(bottom)
 
 })
 
@@ -145,6 +160,9 @@ for(let i = 0; i < element.length; i++){
 
         parent.insertBefore(newNode, element[i])
         parent.removeChild(addNode)
+
+        calculateHeight(element[i])
+
       }
     }, false)
 
